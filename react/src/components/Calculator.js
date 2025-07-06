@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 
 const Calculator = () => {
@@ -6,6 +6,7 @@ const Calculator = () => {
   const [operation, setOperation] = useState('');
   const [firstOperand, setFirstOperand] = useState(null);
   const [waitingForSecondOperand, setWaitingForSecondOperand] = useState(false);
+  const [lastExpression, setLastExpression] = useState('');
 
   const handleNumberClick = (value) => {
     if (display === '0' && value !== '.') {
@@ -21,6 +22,7 @@ const Calculator = () => {
       setFirstOperand(parseFloat(display));
       setOperation(op);
       setWaitingForSecondOperand(true);
+      setLastExpression(display + ' ' + op);
       setDisplay('0');
     } else if (!waitingForSecondOperand) {
       const result = calculateResult();
@@ -28,18 +30,35 @@ const Calculator = () => {
       setFirstOperand(result);
       setOperation(op);
       setWaitingForSecondOperand(true);
+      setLastExpression(result + ' ' + op);
     } else {
       setOperation(op);
+      setLastExpression(lastExpression.split(' ')[0] + ' ' + op);
     }
   };
 
-  const handleEqualClick = () => {
+  const handleEqualClick = async () => {
     if (firstOperand !== null && operation && !waitingForSecondOperand) {
       const result = calculateResult();
+      const expression = `${lastExpression} ${display}`;
       setDisplay(result.toString());
       setFirstOperand(null);
       setOperation('');
       setWaitingForSecondOperand(false);
+      setLastExpression('');
+
+      // Send calculation to backend
+      try {
+        await fetch('/api/calculations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ expression, result }),
+        });
+      } catch (error) {
+        console.error('Error saving calculation:', error);
+      }
     }
   };
 
@@ -64,6 +83,7 @@ const Calculator = () => {
     setOperation('');
     setFirstOperand(null);
     setWaitingForSecondOperand(false);
+    setLastExpression('');
   };
 
   const handleBackspaceClick = () => {
