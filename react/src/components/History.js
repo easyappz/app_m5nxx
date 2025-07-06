@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, List, ListItem, ListItemText, CircularProgress, Alert } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemText, CircularProgress, Divider } from '@mui/material';
 
-const History = () => {
+function History() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,40 +28,39 @@ const History = () => {
 
   if (loading) {
     return (
-      <Box className="history-container">
-        <CircularProgress sx={{ color: 'white' }} />
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
+        <CircularProgress color="primary" />
       </Box>
     );
   }
 
   if (error) {
     return (
-      <Box className="history-container">
-        <Alert severity="error" sx={{ backgroundColor: '#3a3a3a', color: 'white' }}>
-          {error}
-        </Alert>
+      <Box sx={{ padding: 2 }}>
+        <Typography variant="body1" color="error">
+          Error: {error}
+        </Typography>
       </Box>
     );
   }
 
   return (
-    <Box className="history-container">
-      <Typography variant="h6" sx={{ color: 'white', marginBottom: '16px' }}>
+    <Box sx={{ padding: 2, backgroundColor: '#212121', borderRadius: 2, maxHeight: '400px', overflowY: 'auto' }}>
+      <Typography variant="h6" gutterBottom color="white">
         Calculation History
       </Typography>
+      <Divider sx={{ backgroundColor: '#333', marginBottom: 2 }} />
       {history.length === 0 ? (
-        <Typography variant="body1" sx={{ color: 'white', textAlign: 'center' }}>
+        <Typography variant="body2" color="text.secondary" sx={{ color: '#aaa' }}>
           No calculations yet.
         </Typography>
       ) : (
-        <List sx={{ maxHeight: '300px', overflowY: 'auto' }}>
+        <List>
           {history.map((calc, index) => (
-            <ListItem key={index} sx={{ backgroundColor: '#2d2d2d', marginBottom: '4px', borderRadius: '4px' }}>
+            <ListItem key={calc._id} sx={{ padding: 1, borderBottom: index < history.length - 1 ? '1px solid #333' : 'none' }}>
               <ListItemText 
-                primary={`${calc.expression} = ${calc.result}`} 
-                secondary={new Date(calc.timestamp).toLocaleString()} 
-                primaryTypographyProps={{ color: 'white' }}
-                secondaryTypographyProps={{ color: '#aaa' }}
+                primary={<Typography color="white">{calc.expression}</Typography>} 
+                secondary={<Typography color="white" variant="body2">= {calc.result}</Typography>} 
               />
             </ListItem>
           ))}
@@ -69,6 +68,6 @@ const History = () => {
       )}
     </Box>
   );
-};
+}
 
 export default History;
