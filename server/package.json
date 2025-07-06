@@ -1,24 +1,24 @@
 {
-  "name": "simple-express-app",
+  "name": "calculator-api",
   "version": "1.0.0",
-  "description": "A simple Node.js Express application",
-  "main": "index.js",
+  "description": "API for calculator history with Node.js and Express",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "express",
     "node",
-    "api"
+    "api",
+    "calculator"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.3",
     "express": "^4.21.0",
-    "mongoose": "^8.14.1",
-    "dotenv": "^10.0.0"
+    "mongoose": "^8.14.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
