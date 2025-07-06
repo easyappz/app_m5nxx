@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const apiRoutes = require('./apiRoutes');
 
@@ -10,6 +11,9 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Enable CORS for cross-origin requests
+app.use(cors());
 
 // API routes
 app.use('/api', apiRoutes);
